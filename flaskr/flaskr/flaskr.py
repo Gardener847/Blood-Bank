@@ -287,18 +287,7 @@ def add_form():
     #"""use question marks to prevent app from SQL injection"""
     #"""takes data extracted from form and insert into table"""
     db = get_db()
-    b_bank= db.execute('SELECT BB.bb_name\
-                    FROM    bloods AS B, blood_bank AS BB, has_blood AS HB\
-                    WHERE   BB.bb_id = HB.blood_bank_id AND HB.blood_bank_ref_id = B.blood_bank_ref_id AND B.blood_amt <= "20000"')
-    b_type= db.execute('SELECT B.b_type\
-                    FROM    bloods AS B, blood_bank AS BB, has_blood AS HB\
-                    WHERE   BB.bb_id = HB.blood_bank_id AND HB.blood_bank_ref_id = B.blood_bank_ref_id AND B.blood_amt <= "20000"')
-    inventory= db.execute('SELECT  B.blood_amt\
-                    FROM    bloods AS B, blood_bank AS BB, has_blood AS HB\
-                    WHERE   BB.bb_id = HB.blood_bank_id AND HB.blood_bank_ref_id = B.blood_bank_ref_id AND B.blood_amt <= "20000"')
-    a_mess1= "Blood Type: %s" + b_type
-    a_mess2= " at Blood Bank: %s is less than 20,000 ml" + b_bank
-    a_mess3= a_mess1+a_mess2
+    
     today = date.today().strftime('%Y-%m-%d')  
     ti= time.ctime()
     # Patient Forms
@@ -358,6 +347,17 @@ def add_form():
         db.execute('insert into supervise (supervisor_id, super_fname, super_lname, supervised_id, ised_fname, ised_lname) values (?, ?, ?, ?, ?, ?)',
         [request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id'], request.form['ised_fname'],request.form['ised_lname']])
         flash('Relation added')
+        db.commit()
+ 
+    elif (request.form.get('addForm', None) == "Add Doctor-Patient Relation"):
+        db.execute('insert into doctor_take_care_of (doctor_id, patient_id) values (?, ?)',
+        [request.form['doctor_id'], request.form['patient_id']])
+        flash('Added Doctor-Patient Relation')
+        db.commit()
+    elif (request.form.get('addForm', None) == "Add Doctor-Nurse Relation"):
+        db.execute('insert into assists (doctor_id, nurse_id) values (?, ?)',
+        [request.form['doctor_id'], request.form['nurse_id']])
+        flash('Added Doctor-Nurse Relation')
         db.commit()
     elif (request.form.get('addForm', None) == "Get Blood Packs for Patient"):
         cur = db.execute('select * from bloods')
@@ -428,7 +428,7 @@ def add_form():
         flash('Message added')
         db.commit()
 
-        
+    
    
     elif(request.form.get('addForm', None) == "Add Nurse"):
         db.execute('insert into nurse (n_id, n_fname, n_lname) values ( ?, ?, ?)', [request.form['n_id'], request.form['n_fname'], request.form['n_lname']])
@@ -451,9 +451,25 @@ def delete_data():
             db.execute('delete from patients where p_id=? AND p_fname=? AND p_lname=? AND blood_type=?', [request.form['p_id'], request.form['p_fname'], request.form['p_lname'], request.form['blood_type']])
             db.commit()
     elif (request.form.get('action', None) == "Delete Doctor"):
-            flash('Data deleted. DB committed successfully.' + request.form['d_id'])
-            db.execute('delete from doctor where d_id=? AND d_fname=? AND d_lname=?', [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
-            db.commit()
+        flash('Data deleted. DB committed successfully.' + request.form['d_id'])
+        db.execute('delete from doctor where d_id=? AND d_fname=? AND d_lname=?', [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
+        db.commit()
+    elif (request.form.get('action', None) == "Delete Donor"):
+        flash('Data deleted. DB committed successfully.' + request.form['d_id'])
+        db.execute('delete from donor where d_id=? AND d_fname=? AND d_lname=?', [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
+        db.commit()
+    elif (request.form.get('action', None) == "Delete Blood Bank"):
+        flash('Data deleted. DB committed successfully.' + request.form['bb_id'])
+        db.execute('delete from blood_bank where bb_name=? AND bb_id=? AND bb_location=?', [request.form['bb_name'], request.form['bb_id'], request.form['bb_location']])
+        db.commit()
+    elif (request.form.get('action', None) == "Delete Doctor-Patient Relation"):
+        flash('Data deleted. DB committed successfully.' + request.form['doctor_id'])
+        db.execute('delete from doctor_take_care_of where doctor_id=? AND patient_id=?', [request.form['doctor_id'], request.form['patient_id']])
+        db.commit()
+    elif (request.form.get('action', None) == "Delete Doctor-Nurse Relation"):
+        flash('Data deleted. DB committed successfully.' + request.form['doctor_id'])
+        db.execute('delete from assists where doctor_id=? AND nurse_id=?', [request.form['doctor_id'], request.form['nurse_id']])
+        db.commit()
     elif(request.form.get('action', None) == "Delete Nurse"):
             flash('Data deleted. DB committed successfully' + request.form['n_id'])
             db.execute('delete from nurse where n_id=? AND n_fname=? AND n_lname=?', [request.form['n_id'], request.form['n_fname'], request.form['n_lname']])
@@ -504,6 +520,20 @@ def change_data():
             [request.form['d_fname'], request.form['d_lname'], request.form['d_id']])
         flash('Changed Doctor Name')
         db.commit()
+    elif (request.form.get('action', None) == "Change Donors Name"):
+        db.execute('update donor set d_fname=?, d_lname=? where d_id=?',
+            [request.form['d_fname'], request.form['d_lname'], request.form['d_id']])
+        flash('Changed Donors\'s Name')
+        db.commit()
+    elif (request.form.get('action', None) == "Change Blood Bank Name"):
+        db.execute('update blood_bank set bb_name=?, bb_location=? where bb_id=?',
+            [request.form['bb_name'], request.form['bb_location'], request.form['bb_id']])
+        flash('Changed Blood Bank\'s Name')
+        db.commit()
+    elif (request.form.get('action', None) == "Change Doctor-Patient Relation"):
+        db.execute('update doctor_take_care_of set patient_id=? where doctor_id=?',
+            [request.form['doctor_id'], request.form['patient_id']])
+        flash('Changed Doctor-Patient\'s Relation')
     elif (request.form.get('action', None) == "Change Nurse Name"):
         db.execute('update nurse set n_lname=?,n_fname=? where n_id=?', [request.form['n_lname'], request.form['n_fname'], request.form['n_id']])
         flash('Nurse name Changed')
