@@ -656,6 +656,7 @@ def login():
                     WHERE   BB.bb_id = HB.blood_bank_id AND HB.blood_bank_ref_id = B.blood_bank_ref_id AND B.blood_amt <= "20000"'):
                 db.execute('insert into notifications (not_id, message,u_role,m_date,time) values  (?,?,?,?,?)', [random , "Check blood bank inventory. A blood bank has less than 20,000ml of a certain type of blood.", "head nurse", today,ti])
                 db.commit()
+                flash('New Notifications')
                 break    
             return redirect(url_for('show_links'))
         else:
