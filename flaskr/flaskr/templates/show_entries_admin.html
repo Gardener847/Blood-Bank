@@ -614,6 +614,24 @@
                             </li>
                         </ul>
                     </div>
+                {% elif chosen == "nursesTakingCareOf" %}    
+                 <h2>Change Patient's Nurse</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Current Patient ID:
+                                <input type=text size=30 name=patient_id>
+                            </li>
+                            <li>
+                                New Nurse ID:
+                                <input type=text size=30 name=nurse_id>
+                            </li>
+                                                     
+                            <li>
+                                <input type="submit" name="action" value="Change Patient's Nurse" />
+                            </li>
+                        </ul>
+                    </div>
                 {% endif %}
             </form>
         {% endif %}
