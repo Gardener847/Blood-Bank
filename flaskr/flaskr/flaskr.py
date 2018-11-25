@@ -8,7 +8,6 @@ from flask_bcrypt import Bcrypt
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from datetime import date
 from datetime import datetime
-from random import randint
 
 app = Flask(__name__) # create the application instance
 app.config.from_object(__name__) # load config from this file, flaskr.py
@@ -86,7 +85,7 @@ def show_links():
                 return render_template('show_entries_all.html', doctors=doctors, chosen="doctors")
         elif (request.form.get('action', None) == "Show Doctors taking care of patients..."):
             cur = db.execute(
-                'SELECT D.d_fname, D.d_lname, P.p_fname, P.p_lname\
+                'SELECT D.d_Fname, D.d_lname, P.p_fname, P.p_lname\
                 FROM    doctor AS D, patients AS P, doctor_take_care_of AS DC \
                 WHERE   D.d_id = DC.doctor_id AND DC.patient_id = P.p_id \
                 ORDER BY D.d_fname')
@@ -94,11 +93,11 @@ def show_links():
             flash('inside show doctors taking care of')
             global role
             if (role == "admin"):
-                return render_template('show_entries_admin.html', doctorsTakesCareOf=doctorsTakesCareOf, chosen="doctorsTakesCareOf") 
+                return render_template('show_entries_admin.html', doctorsTakesCareOf=doctorsTakesCareOf, chosen="doctorsTakesCareOf")
             elif (role == "head nurse"):
-                return render_template('show_entries_nurse.html', doctorsTakesCareOf=doctorsTakesCareOf, chosen="doctorsTakesCareOf") 
+                return render_template('show_entries_nurse.html', doctorsTakesCareOf=doctorsTakesCareOf, chosen="doctorsTakesCareOf")
             else:
-                return render_template('show_entries_all.html', doctorsTakesCareOf=doctorsTakesCareOf, chosen="doctorsTakesCareOf") 
+                return render_template('show_entries_all.html', doctorsTakesCareOf=doctorsTakesCareOf, chosen="doctorsTakesCareOf")
         elif (request.form.get('action', None) == "Show Doctors Assisted by which Nurses"):
             cur = db.execute(
                 'SELECT D.d_fname, D.d_lname, N.n_fname, N.n_lname\
@@ -109,11 +108,11 @@ def show_links():
             flash('inside show doctors being by assisted by which nurses')
             global role
             if (role == "admin"):
-                return render_template('show_entries_admin.html', doctorsAssistedBy=doctorsAssistedBy, chosen="doctorsAssistedBy") 
+                return render_template('show_entries_admin.html', doctorsAssistedBy=doctorsAssistedBy, chosen="doctorsAssistedBy")
             elif (role == "head nurse"):
-                return render_template('show_entries_nurse.html', doctorsAssistedBy=doctorsAssistedBy, chosen="doctorsAssistedBy") 
-            else: 
-                return render_template('show_entries_all.html', doctorsAssistedBy=doctorsAssistedBy, chosen="doctorsAssistedBy") 
+                return render_template('show_entries_nurse.html', doctorsAssistedBy=doctorsAssistedBy, chosen="doctorsAssistedBy")
+            else:
+                return render_template('show_entries_all.html', doctorsAssistedBy=doctorsAssistedBy, chosen="doctorsAssistedBy")
         elif (request.form.get('action', None) == "Show Patients"):
             cur = db.execute('select * from patients')
             patients = cur.fetchall()
@@ -136,9 +135,9 @@ def show_links():
                 patientsReceiveBlood = cur.fetchall()
                 flash('inside show patients receiving blood from which blood bank')
                 if (role == "admin"):
-                    return render_template('show_entries_admin.html', patientsReceiveBlood=patientsReceiveBlood, chosen="patientsReceiveBlood") 
+                    return render_template('show_entries_admin.html', patientsReceiveBlood=patientsReceiveBlood, chosen="patientsReceiveBlood")
                 else:
-                    return render_template('show_entries_nurse.html', patientsReceiveBlood=patientsReceiveBlood, chosen="patientsReceiveBlood") 
+                    return render_template('show_entries_nurse.html', patientsReceiveBlood=patientsReceiveBlood, chosen="patientsReceiveBlood")
         elif (request.form.get('action', None) == "Show Patients Who Needs Blood"):
             cur = db.execute(
                 'SELECT P.p_fname, P.p_lname, P.blood_type\
@@ -257,20 +256,6 @@ def show_links():
                 return render_template('show_entries_admin.html', accounts=accounts, chosen="accounts")
             else:
                 flash('unauthorized')
-        elif(request.form.get('action',None) == "Show Notifications"):
-            global role 
-            if(role == "admin"):
-                #uname = 
-                cur = db.execute('select n.not_id, n.message, n.m_date, n.time from notifications n, accounts a where a.userRole= "admin" order by time desc')
-                notifications = cur.fetchall()
-                flash('inside show notifications')
-                return render_template('show_entries_admin.html', notifications=notifications, chosen="notifications")
-            elif(role == "head nurse"):
-                cur = db.execute('select n.not_id, n.message, n.m_date, n.time from notifications n, accounts a where a.userRole= "head nurse" AND n.u_role= "head nurse" order by time desc')
-                notifications = cur.fetchall()
-                flash('inside show notifications')
-                return render_template('show_entries_nurse.html', notifications=notifications, chosen = "notifications")
-            
     global role
     if (role == "admin"):
         return render_template('show_entries_admin.html')
@@ -284,43 +269,37 @@ def show_links():
 def add_form():
     if not session.get('logged_in'):
         abort(401)
-    #"""use question marks to prevent app from SQL injection"""
-    #"""takes data extracted from form and insert into table"""
+    """use question marks to prevent app from SQL injection"""
+    """takes data extracted from form and insert into table"""
     db = get_db()
-    b_bank= db.execute('SELECT BB.bb_name\
-                    FROM    bloods AS B, blood_bank AS BB, has_blood AS HB\
-                    WHERE   BB.bb_id = HB.blood_bank_id AND HB.blood_bank_ref_id = B.blood_bank_ref_id AND B.blood_amt <= "20000"')
-    b_type= db.execute('SELECT B.b_type\
-                    FROM    bloods AS B, blood_bank AS BB, has_blood AS HB\
-                    WHERE   BB.bb_id = HB.blood_bank_id AND HB.blood_bank_ref_id = B.blood_bank_ref_id AND B.blood_amt <= "20000"')
-    inventory= db.execute('SELECT  B.blood_amt\
-                    FROM    bloods AS B, blood_bank AS BB, has_blood AS HB\
-                    WHERE   BB.bb_id = HB.blood_bank_id AND HB.blood_bank_ref_id = B.blood_bank_ref_id AND B.blood_amt <= "20000"')
-    a_mess1= "Blood Type: %s" + b_type
-    a_mess2= " at Blood Bank: %s is less than 20,000 ml" + b_bank
-    a_mess3= a_mess1+a_mess2
-    today = date.today().strftime('%Y-%m-%d')  
-    ti= time.ctime()
     # Patient Forms
     if (request.form.get('addForm', None) == "Add Patient"):
-        db.execute('insert into patients (p_id, p_fname, p_lname, blood_type) values (?, ?, ?, ?)', 
-        [request.form['p_id'], request.form['p_fname'], request.form['p_lname'], request.form['blood_type']]) 
+        db.execute('insert into patients (p_id, p_fname, p_lname, blood_type) values (?, ?, ?, ?)',
+        [request.form['p_id'], request.form['p_fname'], request.form['p_lname'], request.form['blood_type']])
         flash('Added Patient')
-        db.commit()
+    elif (request.form.get('addForm', None) == "Add Donor"):
+        db.execute('insert into donor (d_id, d_fname, d_lname) values (?, ?, ?)',
+        [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
+        flash('Added Donor')
     elif (request.form.get('addForm', None) == "Add Doctor"):
-        db.execute('insert into doctor (d_id, d_fname, d_lname) values (?, ?, ?)', 
+        db.execute('insert into doctor (d_id, d_fname, d_lname) values (?, ?, ?)',
         [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
         flash('Added Doctor')
         db.commit()
-    elif (request.form.get('addForm', None) == "Add Donor"):
-        db.execute('insert into donor (d_id, d_fname, d_lname) values (?, ?, ?)', 
-        [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
-        flash('Added Donor')
+    elif (request.form.get('addForm', None) == "Add Blood Bank"):
+        db.execute('insert into blood_bank (bb_name, bb_id, bb_location) values (?, ?, ?)',
+        [request.form['bb_name'], request.form['bb_id'], request.form['bb_location']])
+        flash('Added Blood Bank')
         db.commit()
-    elif (request.form.get('addForm', None) == "Add Nurse-Patient Relation"):
-        db.execute('insert into nurse_take_care_of (nurse_id, patient_id) values (?, ?)',
-        [request.form['nurse_id'], request.form['patient_id']])
-        flash('Added Nurse-Patient Relation')
+    elif (request.form.get('addForm', None) == "Add Doctor-Patient Relation"):
+        db.execute('insert into doctor_take_care_of (doctor_id, patient_id) values (?, ?)',
+        [request.form['doctor_id'], request.form['patient_id']])
+        flash('Added Doctor-Patient Relation')
+        db.commit()
+    elif (request.form.get('addForm', None) == "Add Doctor-Nurse Relation"):
+        db.execute('insert into assists (doctor_id, nurse_id) values (?, ?)',
+        [request.form['doctor_id'], request.form['nurse_id']])
+        flash('Added Doctor-Nurse Relation')
         db.commit()
     elif (request.form.get('addForm', None) == "Get Blood from Donor"):
         d_fname = request.form['donor_fname']
@@ -350,15 +329,9 @@ def add_form():
             flash(d_fname + ' cannot donate')
         # update donor file
     elif (request.form.get('addForm', None) == "Add Blood Bank"):
-        db.execute('insert into blood_bank (bb_id, bb_name, bb_location) values (?, ?, ?)', 
+        db.execute('insert into blood_bank (bb_id, bb_name, bb_location) values (?, ?, ?)',
         [request.form['bb_id'], request.form['bb_name'], request.form['bb_location']])
         flash('Added Blood Bank')
-        db.commit()
-    elif(request.form.get('addForm',None) == "Add Supervisor"):
-        db.execute('insert into supervise (supervisor_id, super_fname, super_lname, supervised_id, ised_fname, ised_lname) values (?, ?, ?, ?, ?, ?)',
-        [request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id'], request.form['ised_fname'],request.form['ised_lname']])
-        flash('Relation added')
-        db.commit()
     elif (request.form.get('addForm', None) == "Get Blood Packs for Patient"):
         cur = db.execute('select * from bloods')
         bloods = cur.fetchall()
@@ -367,10 +340,10 @@ def add_form():
         cur = db.execute('select * from patients')
         patients = cur.fetchall()
         hasBlood = False
-        p_fname = request.form['patient_fname']         
+        p_fname = request.form['patient_fname']
         p_lname = request.form['patient_lname']
         blood_bank_id_br = ''
-        # create variables for storing data to 
+        # create variables for storing data to
         patient_id = ''                                         # patient_id
         blood_bank_id_bb = ''                                   # blood_bank_id
         today = date.today().strftime('%Y-%m-%d')               # received_date
@@ -385,7 +358,6 @@ def add_form():
             if (i[1] == blood_type and i[3] > blood_pack_cnt):
                 hasBlood = True
                 blood_bank_id_br = i[0]    # br...
-                db.commit()
         if (hasBlood == False):
             flash('All Blood Banks are out of Patient\'s Blood Type')
         else:
@@ -413,27 +385,7 @@ def add_form():
                 SET     blood_amt=?, num_available=?\
                 WHERE   blood_bank_ref_id=? AND b_type=?', [blood_amt, num_available, blood_bank_id_br, blood_type])
             flash('The Blood Packs are on Its Way')
-            db.commit()
- 
-    elif (request.form.get('addForm', None) == "Add Account"):
-        db.execute('insert into accounts (id, usrName, psswd, userRole) values (?, ?, ?, ?)', 
-        [request.form['id'], request.form['usrName'], request.form['psswd'], request.form['userRole']])
-        addac= "Added Account"
-        flash('%s'%addac)
-        db.commit()
-    elif (request.form.get('addForm', None) == "Add Notifications"):
-
-        db.execute('insert into notifications(not_id, message,u_role,m_date,time) values (?, ?,?,?,?)', 
-        [request.form['not_id'], request.form['message'], request.form['u_role'], today,ti])
-        flash('Message added')
-        db.commit()
-
-        
-   
-    elif(request.form.get('addForm', None) == "Add Nurse"):
-        db.execute('insert into nurse (n_id, n_fname, n_lname) values ( ?, ?, ?)', [request.form['n_id'], request.form['n_fname'], request.form['n_lname']])
-        flash('Nurse Added')
-	db.commit()
+    db.commit()
     global role
     if (role == "admin"):
         return render_template('show_entries_admin.html')
@@ -447,47 +399,36 @@ def add_form():
 def delete_data():
     db = get_db()
     if (request.form.get('action', None) == "Delete Patient"):
-            flash('Data deleted. DB committed successfully.' + request.form['p_id'])
-            db.execute('delete from patients where p_id=? AND p_fname=? AND p_lname=? AND blood_type=?', [request.form['p_id'], request.form['p_fname'], request.form['p_lname'], request.form['blood_type']])
-            db.commit()
+        flash('Data deleted. DB committed successfully.' + request.form['p_id'])
+        db.execute('delete from patients where p_id=? AND p_fname=? AND p_lname=? AND blood_type=?', [request.form['p_id'], request.form['p_fname'], request.form['p_lname'], request.form['blood_type']])
+        db.commit()
     elif (request.form.get('action', None) == "Delete Doctor"):
-            flash('Data deleted. DB committed successfully.' + request.form['d_id'])
-            db.execute('delete from doctor where d_id=? AND d_fname=? AND d_lname=?', [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
-            db.commit()
-    elif(request.form.get('action', None) == "Delete Nurse"):
-            flash('Data deleted. DB committed successfully' + request.form['n_id'])
-            db.execute('delete from nurse where n_id=? AND n_fname=? AND n_lname=?', [request.form['n_id'], request.form['n_fname'], request.form['n_lname']])
-            db.commit()
-    elif(request.form.get('action', None) == "Delete Accounts"):
-            flash('Data deleted. DB committed successfully' + request.form['id'])
-            db.execute('delete from accounts where id=? AND usrName=? AND psswd=? AND userRole=?',[request.form['id'], request.form['usrName'], request.form['psswd'], request.form['userRole']])
-            db.commit()
-    elif(request.form.get('action',None) == "Delete Supervisor"):
-        flash('Data Deleted. DB commited successfully' + request.form['supervisor_id'])
-        db.execute('delete from supervise where supervisor_id=? AND super_fname=? AND super_lname=? AND supervised_id=? AND ised_fname=? AND ised_lname=?',
-        [request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id'], request.form['ised_fname'],request.form['ised_lname']])
+        flash('Data deleted. DB committed successfully.' + request.form['d_id'])
+        db.execute('delete from doctor where d_id=? AND d_fname=? AND d_lname=?', [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
         db.commit()
-    elif(request.form.get('action', None) == "Delete Nurse-Patient Relation"):
-        flash('Data Deleted. DB commited successfully' + request.form['nurse_id'])
-        db.execute('delete from nurse_take_care_of where nurse_id=? AND patient_id=?', [request.form['nurse_id'], request.form['patient_id']]);
+    elif (request.form.get('action', None) == "Delete Donor"):
+        flash('Data deleted. DB committed successfully.' + request.form['d_id'])
+        db.execute('delete from donor where d_id=? AND d_fname=? AND d_lname=?', [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
         db.commit()
-    elif(request.form.get('action', None) == "Delete Notification"):
-        flash('Data Deleted. DB commited successfully' + request.form['not_id'])
-        db.execute('delete from notifications where not_id=?', [request.form['not_id']]);
+    elif (request.form.get('action', None) == "Delete Blood Bank"):
+        flash('Data deleted. DB committed successfully.' + request.form['bb_id'])
+        db.execute('delete from blood_bank where bb_name=? AND bb_id=? AND bb_location=?', [request.form['bb_name'], request.form['bb_id'], request.form['bb_location']])
         db.commit()
-    elif(request.form.get('action', None) == "Delete All Notifications"):
-        if(request.form['confirm'] == "yes" or request.form['confirm'] == "Yes" or request.form['confirm'] == "YES"):
-            flash('Data Deleted. DB commited successfully' + request.form['not_id'])
-            db.execute('delete from notifications where not_id != "DeleteAll"');
-            db.commit()
+    elif (request.form.get('action', None) == "Delete Doctor-Patient Relation"):
+        flash('Data deleted. DB committed successfully.' + request.form['doctor_id'])
+        db.execute('delete from doctor_take_care_of where doctor_id=? AND patient_id=?', [request.form['doctor_id'], request.form['patient_id']])
+        db.commit()
+    elif (request.form.get('action', None) == "Delete Doctor-Nurse Relation"):
+        flash('Data deleted. DB committed successfully.' + request.form['doctor_id'])
+        db.execute('delete from assists where doctor_id=? AND nurse_id=?', [request.form['doctor_id'], request.form['nurse_id']])
+        db.commit()
     global role
     if (role == "admin"):
-        return render_template('show_entries_admin.html')
+        return render_template('show_entries_all.html')
     elif (role == "head nurse"):
         return render_template('show_entries_nurse.html')
     else:
         return render_template('show_entries_all.html')
-
 
 # Edit tuple
 @app.route('/changeData', methods=['GET', 'POST'])
@@ -497,40 +438,29 @@ def change_data():
     if (request.form.get('action', None) == "Change Patient's Name"):
         db.execute('update patients set p_fname=?, p_lname=? where p_id=?', [request.form['p_fNewName'], request.form['p_lNewName'], request.form['p_id']])
         flash('Changed Patient\'s Name')
-        db.commit()
-	
-    elif(request.form.get('action', None) == "Change Doctor Name"):
-        db.execute('update doctor set d_fname=?, d_lname where d_id=?', 
-            [request.form['d_fname'], request.form['d_lname'], request.form['d_id']])
-        flash('Changed Doctor Name')
-        db.commit()
-    elif (request.form.get('action', None) == "Change Nurse Name"):
-        db.execute('update nurse set n_lname=?,n_fname=? where n_id=?', [request.form['n_lname'], request.form['n_fname'], request.form['n_id']])
-        flash('Nurse name Changed')
-        db.commit()
-    elif (request.form.get('action', None) == "Change Account Information"):
-        db.execute('update accounts set usrName=?, psswd=?, userRole=? where id=?', 
-            [request.form['usrName'], request.form['psswd'], request.form['userRole'], request.form['id']])
-        flash('Accoutn information changed')
-        db.commit()
-    elif(request.form.get('action', None) == "Change Supervisor"):
-        db.execute('update supervise set supervisor_id=?,super_fname=?,super_lname=? where supervised_id=? ',
-        [request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id']])
-        flash('Supervisor Changed. DB commited successfully' )
-        db.commit()
-    elif(request.form.get('action', None) == "Change Supervisee"):
-        db.execute('update supervise set supervised_id=?,ised_fname=?,ised_lname=? where supervisor_id=? ',
-        [request.form['supervised_id'], request.form['ised_fname'], request.form['ised_lname'], request.form['supervisor_id']])
-        flash('Supervisee Changed. DB commited successfully' )
-        db.commit()
-    elif(request.form.get('action', None) == "Change Patient's Blood Type"):
-        db.execute('update patients set blood_type=? where p_id=?', 
+    elif (request.form.get('action', None) == "Change Patient's Blood Type"):
+        db.execute('update patients set blood_type=? where p_id=?',
             [request.form['blood_type'], request.form['pB_id']])
         flash('Changed Patient\'s Blood Type')
+    elif (request.form.get('action', None) == "Change Doctors Name"):
+        db.execute('update doctor set d_fname=?, d_lname=? where d_id=?',
+            [request.form['d_fname'], request.form['d_lname'], request.form['d_id']])
+        flash('Changed Doctors\'s Name')
         db.commit()
-    elif(request.form.get('action', None) == "Change Patient's Nurse"):
-        db.execute('update nurse_take_care_of set nurse_id=? where patient_id=?', [request['nurse_id'],request['patient_id']])
-        flash('Nurse Changed')
+    elif (request.form.get('action', None) == "Change Donors Name"):
+        db.execute('update donor set d_fname=?, d_lname=? where d_id=?',
+            [request.form['d_fname'], request.form['d_lname'], request.form['d_id']])
+        flash('Changed Donors\'s Name')
+        db.commit()
+    elif (request.form.get('action', None) == "Change Blood Bank Name"):
+        db.execute('update blood_bank set bb_name=?, bb_location=? where bb_id=?',
+            [request.form['bb_name'], request.form['bb_location'], request.form['bb_id']])
+        flash('Changed Blood Bank\'s Name')
+        db.commit()
+    elif (request.form.get('action', None) == "Change Doctor-Patient Relation"):
+        db.execute('update doctor_take_care_of set patient_id=? where doctor_id=?',
+            [request.form['doctor_id'], request.form['patient_id']])
+        flash('Changed Doctor-Patient\'s Relation')
         db.commit()
     # Transfer Blood Form
     elif (request.form.get('action', None) == "Transfer Blood"):
@@ -608,21 +538,18 @@ def change_data():
                     'UPDATE bloods \
                     SET     blood_amt=?, num_available=?\
                     WHERE   blood_bank_ref_id=? AND b_type=?', [blood_amt_to, blood_pack_cnt_to, blood_to, blood_type])
-            
                 # insert into transfer_blood table
                 db.execute(
                     'INSERT INTO transfer_blood (transferred_from, from_blood_bank, transferred_to, to_blood_bank, blood_type, blood_amt, blood_pack_cnt, transfer_date) values(?, ?, ?, ?, ?, ?, ?, ?)', [blood_from_bb, from_blood_bank, blood_to_bb, to_blood_bank, blood_type, blood_amt, blood_pack_cnt, today])
                 flash('Transfer Complete')
     db.commit()
-	
-       
     global role
     if (role == "admin" or role == "head nurse"):
         return render_template('show_entries_admin.html')
     else:
         return render_template('show_entries_nurse.html')
 
-#logging the user in 
+#logging the user in
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
@@ -646,18 +573,6 @@ def login():
             usr = request.form['username']
             session['logged_in'] = True
             flash('You were logged in as a(n) ' + role)
-            today = date.today().strftime('%Y-%m-%d')  
-            ti= time.ctime()
-            random = randint(1000,9756200)
-            
-            #flash(cur.fetchall())
-            for i in db.execute('SELECT  B.blood_amt\
-                    FROM    bloods AS B, blood_bank AS BB, has_blood AS HB\
-                    WHERE   BB.bb_id = HB.blood_bank_id AND HB.blood_bank_ref_id = B.blood_bank_ref_id AND B.blood_amt <= "20000"'):
-                db.execute('insert into notifications (not_id, message,u_role,m_date,time) values  (?,?,?,?,?)', [random , "Check blood bank inventory. A blood bank has less than 20,000ml of a certain type of blood.", "head nurse", today,ti])
-                db.commit()
-                flash('New Notifications')
-                break    
             return redirect(url_for('show_links'))
         else:
             error = 'Invalid username or password'
