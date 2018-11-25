@@ -50,6 +50,43 @@
                             </li>
                         </ul>
                     </div>
+                {% elif chosen == "patients" %}
+                    <h2>Change Patient Name</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Patient ID:
+                                <input type=text size=30 name=p_id>
+                            </li>
+                            <li>
+                                New First Name:
+                                <input type=text size=30 name=p_fNewName>
+                            </li>
+                            <li>
+                                New Last Name:
+                                <input type=text size=30 name=p_lNewName>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Change Patient's Name" />
+                            </li>
+                        </ul>
+                    </div>
+                 <h2>Change Blood Type</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Patient ID:
+                                <input type=text size=30 name=pB_id>
+                            </li>
+                            <li>
+                                New Blood Type:
+                                <input type=text size=3 name=blood_type>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Change Patient's Blood Type" />
+                            </li>
+                        </ul>
+                    </div>
                 {% endif %}
             </form>
 
@@ -193,7 +230,108 @@
                 {% endif %}
             </form>
         {% endif %}
-
+            <!-- Delete Forms -->
+            <form action="{{ url_for('delete_data') }}" method="post" class=add-entry>
+                {% if chosen == "patients" %}
+                    <h2>Delete Patient</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Patient ID:
+                                <input type=text size=30 name=p_id>
+                            </li>
+                            <li>
+                                First Name:
+                                <input type=text size=30 name=p_fname>
+                            </li>
+                            <li>
+                                Last Name:
+                                <input type=text size=30 name=p_lname>
+                            </li>
+                            <li>
+                                Blood Type:
+                                <input type=text size=30 name=blood_type>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Delete Patient" />
+                            </li>
+                        </ul>
+                    </div
+                {% elif chosen == "nursesTakingCareOf" %}
+                    <h2>Delete Nurse-Patient Relation</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Nurse ID:
+                                <input type=text size=30 name=nurse_id>
+                            </li>
+                            <li>
+                                Patient ID:
+                                <input type=text size=30 name=patient_id>
+                            </li>
+                      
+                            <li>
+                                <input type="submit" name="action" value="Delete Nurse-Patient Relation" />
+                            </li>
+                        </ul>
+                    </div> 
+				{% elif chosen == "nurses" %}
+                    <h2>Delete Nurse</h2>
+					<div id="deleteForm">
+                        <ul>
+                            <li>
+                                Nurse ID:
+                                <input type=text size=30 name=n_id>
+                            </li>
+                            <li>
+                                First Name:
+                                <input type=text size=30 name=n_fname>
+                            </li>
+                            <li>
+                                Last Name:
+                                <input type=text size=30 name=n_lname>
+                            </li>
+                            
+                            <li>
+                                <input type="submit" name="action" value="Delete Nurse" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "supervisedNurses" %}
+                    <h2>Delete Supervisor</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Supervisor ID:
+                                <input type=text size=30 name=supervisor_id>
+                            </li>
+                            <li>
+                                Super First Name:
+                                <input type=text size=30 name=super_fname>
+                            </li>
+                            <li>
+                                Super Last Name:
+                                <input type=text size=30 name=super_lname>
+                            </li>
+                            <li>
+                                Supervised ID:
+                                <input type=text size=30 name=supervised_id>
+                            </li>
+                            <li>
+                                Supervised First Name:
+                                <input type=text size=30 name=ised_fname>
+                            </li>
+                            <li>
+                                Supervised Last Name:
+                                <input type=text size=30 name=ised_lname>
+                            </li>
+                            <li>
+                            <li>
+                                <input type="submit" name="action" value="Delete Supervisor" />
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
         <table class=table>
             {% if chosen == "doctors" %}
                 <tr>
