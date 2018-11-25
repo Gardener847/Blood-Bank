@@ -133,7 +133,63 @@
                                 <input type="submit" name="addForm" value="Get Blood from Donor" />
                             </li>
                         </ul>
+                    </div
+                {% elif chosen == "supervisedNurses" %}
+                    <h2>Add Supervisor</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Supervisor ID:
+                                <input type=text size=30 name=supervisor_id>
+                            </li>
+                            <li>
+                                Super First Name:
+                                <input type=text size=30 name=super_fname>
+                            </li>
+                            <li>
+                                Super Last Name:
+                                <input type=text size=30 name=super_lname>
+                            </li>
+                            <li>
+                                Supervised ID:
+                                <input type=text size=30 name=supervised_id>
+                            </li>
+                            <li>
+                                Supervised First Name:
+                                <input type=text size=30 name=ised_fname>
+                            </li>
+                            <li>
+                                Supervised Last Name:
+                                <input type=text size=30 name=ised_lname>
+                            </li>
+                            <li>
+                            <li>
+                                <input type="submit" name="addForm" value="Add Supervisor" />
+                            </li>
+                        </ul>
                     </div>
+				{% elif chosen == "nurses" %}
+                    <h2>Add Nurse</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Nurse ID:
+                                <input type=text size=30 name=n_id>
+                            </li>
+                            <li>
+                                Nurse First Name:
+                                <input type=text size=30 name=n_fname>
+                            </li>
+                            <li>
+                                Nurse Last Name:
+                                <input type=text size=30 name=n_lname>
+                            </li>
+                           
+                            <li>
+                                <input type="submit" name="addForm" value="Add Nurse" />
+                            </li>
+                        </ul>
+                    </div>    
                 {% endif %}
             </form>
         {% endif %}
