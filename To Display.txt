@@ -1,0 +1,88 @@
+To Display:
+-----------
+1) blood types of particular patients
+2) show which blood types are available from the blood banks in entire country
+	a) per blood bank, show the following:
+		i) name, location, bloods (blood type, weekly_use, number available, name of patient from whom blood was extracted from)
+			-if user (only head nurse allowed, not doctor) click patient name, display patient file
+3) list of patients who need blood transfusion
+4) donors who is willing to donate their blood for the patient
+5) amount and type of blood in blood banks
+
+Data to Fill in:
+----------------
+1) blood donor registers to donate blood
+	a) data include condition, donor name, amount donated, number of times donated, location of donation, blood type, donor id
+2) 
+
+Functionalities:
+----------------
+1) ask donor about health, travel, and other necessary questions, and health exam to ensure donor is fit to donate blood
+	a) if tests donor is health, draw blood
+2) generate trending reports (over all, or per blood bank) for inventory, donation, consumption (break down to blood type, frequency is weekly/monthly)
+	a) this helps to have additional blood drives for blood with low inventory, or more certain blood inventory from location A to location B to anticipate the blood need based on history trending, etc.
+3) auto-email donors with the blood type in low inventory
+
+Restrictions:
+------------
+1) donor is only allowed to donate blood every 60 days
+2) blood bank files can only be accessed by a doctor or a nurse
+3) doctor may or may not have a patient and doctor needs to have at least one nurse assisting them
+4) per patient, at least one nurse must attend to
+5) three types of users: head nurse, nurse, and doctor
+
+(A+, A-, B+, B-, O+, O-, AB+, AB-)
+
+Patient IDs:
+------------
+taken care by either nurse of doctor
+p11223344
+p11112222
+p22223333
+p12345678
+p23456789
+p34567890
+p11122233
+p22233344
+p00112233
+p00011122
+
+Blood Bank IDs:
+--------------
+bb01234567
+bb12345678
+bb23456790
+
+Donor to Donor_File IDs:
+------------------------
+('do0123456', 'df0123456'),
+('do1234567', 'df1234567'),
+('do2345678', 'df2345678'),
+('do3456789', 'df3456789'),
+('do4567890', 'df4567890'),
+('do5678901', 'df5678901'),
+('do6789012', 'df6789012'),
+('do7890123', 'df7890123'),
+('do8901234', 'df8901234'),
+('do9012345', 'df9012345'),
+('do0011223', 'df0011223'),
+('do0112233', 'df0112233'),
+('do1122334', 'df1122334'),
+('do1223344', 'df1223344'),
+('do2233445', 'df2233445'),
+('do2334455', 'df2334455'),
+('do3344556', 'df3344556'),
+('do3445566', 'df3445566'),
+('do4455667', 'df4455667'),
+('do4556677', 'df4556677'),
+('do5566778', 'df5566778');
+
+5040
+A+ (38):1915	(37):1865
+A- (7):353	(8):403
+B+ (34):1714	(33):1663
+B- (6):302	(7):353
+O+ (9):454	(8):403
+O- (2):101	(3):151
+AB+ (3):151	(2):101
+AB- (1):50	(2):101

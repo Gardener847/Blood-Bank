@@ -1,0 +1,399 @@
+{% extends "layout.html" %}
+{% block body %}
+
+    {% if session.logged_in %}
+        <form action="{{ url_for('show_links') }}" method="post" class=add-entry>
+            <input type="submit" name="action" value="Show Doctors"/>
+            <input type="submit" name="action" value="Show Doctors taking care of patients..."/>
+            <input type="submit" name="action" value="Show Doctors Assisted by which Nurses"/>
+            <input type="submit" name="action" value="Show Patients"/>
+            <input type="submit" name="action" value="Show Patients Receiving Blood from which Blood Bank"/>
+            <input type="submit" name="action" value="Show Patients Who Needs Blood"/>
+            <input type="submit" name="action" value="Show Donors" />
+            <input type="submit" name="action" value="Show Donor File" />
+            <input type="submit" name="action" value="Show Blood Banks" />
+            <input type="submit" name="action" value="Show Blood Transferred" />
+            <input type="submit" name="action" value="Show Blood Bank Inventory" />
+            <input type="submit" name="action" value="Show Nurses" />
+            <input type="submit" name="action" value="Show Nurses Taking Care of Which Patients..." />
+            <input type="submit" name="action" value="Show Nurses with Supervisor" />
+            <input type="submit" name="action" value="Show Notifications" />
+        </form>
+            
+        </form>
+
+        {% if chosen %}
+            <!-- Change Forms -->
+            <form action="{{ url_for('change_data') }}" method="post" class=add-entry>
+                {% if chosen == "bloods" %}
+                    <h2>Transfer Blood</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Transfer From:
+                                <input type=text size=30 name=transferred_from>
+                            </li>
+                            <li>
+                                Transfer To:
+                                <input type=text size=30 name=transferred_to>
+                            </li>
+                            <li>
+                                Blood Type:
+                                <input type=text size=30 name=blood_type>
+                            </li>
+                            <li>
+                                Blood Pack Count:
+                                <input type=text size=30 name=blood_pack_cnt>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Transfer Blood" />
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </form>
+
+            <!-- Add Forms -->
+            <form action="{{ url_for('add_form') }}" method="post" class=add-entry>
+                {% if chosen == "patients" %}
+                    <h2>Add Patient</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Patient ID:
+                                <input type=text size=30 name=p_id>
+                            </li>
+                            <li>
+                                First Name:
+                                <input type=text size=30 name=p_fname>
+                            </li>
+                            <li>
+                                Last Name:
+                                <input type=text size=30 name=p_lname>
+                            </li>
+                            <li>
+                                Blood Type:
+                                <input type=text size=30 name=blood_type>
+                            </li>
+                            <li>
+                                <input type="submit" name="addForm" value="Add Patient" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "patientsWhoNeedBlood" %}
+                    <h2>Get Blood for Patients</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Patient's First Name:
+                                <input type=text size=30 name=patient_fname>
+                            </li>
+                            <li>
+                                Patient's Last Name:
+                                <input type=text size=30 name=patient_lname>
+                            </li>
+                            <li>
+                                Blood Type:
+                                <input type=text size=30 name=blood_type>
+                            </li>
+                            <li>
+                                Blood Pack Count Required:
+                                <input type=text size=30 name=blood_pack_cnt>
+                            </li>
+                            <li>
+                                <input type="submit" name="addForm" value="Get Blood Packs for Patient" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "donorFile" %}
+                    <h2>Get Blood from Donor</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Donor's First Name:
+                                <input type=text size=30 name=donor_fname>
+                            </li>
+                            <li>
+                                Donor's Last Name:
+                                <input type=text size=30 name=donor_lname>
+                            </li>
+                            <li>
+                                Healthy or Unhealthy?:
+                                <input type=text size=30 name=condition>
+                            </li>
+                            <li>
+                                Blood Amount(ml) Donated:
+                                <input type=text size=30 name=blood_amt>
+                            </li>
+                            <li>
+                                Donating to which Blood Bank?:
+                                <input type=text size=30 name=bb_name>
+                            </li>
+                            <li>
+                                <input type="submit" name="addForm" value="Get Blood from Donor" />
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </form>
+        {% endif %}
+
+        <table class=table>
+            {% if chosen == "doctors" %}
+                <tr>
+                    <th>Doctor ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+                {% for doctor in doctors %}
+                    <tr>
+                        <td>{{ doctor.d_id }}</td>
+                        <td>{{ doctor.d_fname }}</td>
+                        <td>{{ doctor.d_lname}}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "doctorsTakesCareOf" %}
+                <tr>
+                    <th>Doctor First Name</th>
+                    <th>Doctor Last Name</th>
+                    <th>Patient's First Name</th>
+                    <th>Patient's Last Name</th>
+                </tr>
+                {% for doctorTakesCareOf in doctorsTakesCareOf %}
+                    <tr>
+                        <td>{{ doctorTakesCareOf.d_fname }}</td>
+                        <td>{{ doctorTakesCareOf.d_lname }}</td>
+                        <td>{{ doctorTakesCareOf.p_fname }}</td>
+                        <td>{{ doctorTakesCareOf.p_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "doctorsAssistedBy" %}
+                <tr>
+                    <th>Doctor First Name</th>
+                    <th>Doctor Last Name</th>
+                    <th>Nurse's First Name</th>
+                    <th>Nurse's Last Name</th>
+                </tr>
+                {% for doctorAssistedBy in doctorsAssistedBy %}
+                    <tr>
+                        <td>{{ doctorAssistedBy.d_fname }}</td>
+                        <td>{{ doctorAssistedBy.d_lname }}</td>
+                        <td>{{ doctorAssistedBy.n_fname }}</td>
+                        <td>{{ doctorAssistedBy.n_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "patients" %}
+                <tr>
+                    <th>Patient ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Blood Type</th>
+                </tr>
+                {% for patient in patients %}
+                    <tr>
+                        <td>{{ patient.p_id }}</td>
+                        <td>{{ patient.p_fname }}</td>
+                        <td>{{ patient.p_lname}}</td>
+                        <td>{{ patient.blood_type }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "patientsReceiveBlood" %}
+                <tr>
+                    <th>Patient's First Name</th>
+                    <th>Patient's Last Name</th>
+                    <th>Blood Bank</th>
+                    <th>Received Dated</th>
+                    <th>Blood Type</th>
+                    <th>Received Amount(ml)</th>
+                    <th>Pack Count</th>
+                </tr>
+                {% for patientReceiveBlood in patientsReceiveBlood %}
+                    <tr>
+                        <td>{{ patientReceiveBlood.p_fname }}</td>
+                        <td>{{ patientReceiveBlood.p_lname }}</td>
+                        <td>{{ patientReceiveBlood.bb_name }}</td>
+                        <td>{{ patientReceiveBlood.received_date }}</td>
+                        <td>{{ patientReceiveBlood.blood_type }}</td>
+                        <td>{{ patientReceiveBlood.received_amt }}</td>
+                        <td>{{ patientReceiveBlood.pack_cnt }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "patientsWhoNeedBlood" %}
+                <tr>
+                    <th>Patient's First Name</th>
+                    <th>Patient's Last Name</th>
+                    <th>Patient's Blood Type</th>
+                </tr>
+                {% for patientWhoNeedBlood in patientsWhoNeedBlood %}
+                    <tr>
+                        <td>{{ patientWhoNeedBlood.p_fname }}</td>
+                        <td>{{ patientWhoNeedBlood.p_lname }}</td>
+                        <td>{{ patientWhoNeedBlood.blood_type }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "donors" %}
+                <tr>
+                    <th>Donor ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+                {% for donor in donors %}
+                    <tr>
+                        <td>{{ donor.d_id }}</td>
+                        <td>{{ donor.d_fname }}</td>
+                        <td>{{ donor.d_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "donorFile" %}
+                <tr>
+                    <th>Donor ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Blood Type</th>
+                    <th>Condition</th>
+                    <th>Blood Amount(ml) Donated</th>
+                    <th>Number of Times Donated</th>
+                    <th>Date last Donated</th>
+                </tr>
+                {% for donorFile in donorFiles %}
+                    <tr>
+                        <td>{{ donorFile.df_id }}</td>
+                        <td>{{ donorFile.donor_fname }}</td>
+                        <td>{{ donorFile.donor_lname }}</td>
+                        <td>{{ donorFile.blood_type }}</td>
+                        <td>{{ donorFile.condition }}</td>
+                        <td>{{ donorFile.blood_amt_donated }}</td>
+                        <td>{{ donorFile.num_times_donate }}</td>
+                        <td>{{ donorFile.date_last_donated }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "bloodBank" %}
+                <tr>
+                    <th>Blood Bank ID</th>
+                    <th>Blood Bank Name</th>
+                    <th>Location</th>
+                </tr>
+                {% for bloodBank in bloodBanks %}
+                    <tr>
+                        <td>{{ bloodBank.bb_id }}</td>
+                        <td>{{ bloodBank.bb_name }}</td>
+                        <td>{{ bloodBank.bb_location }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "bloodsTransferred" %}
+                <tr>
+                    <th>Blood Transferred From</th>
+                    <th>Blood Transferred To</th>
+                    <th>Blood Type</th>
+                    <th>Blood Amount(ml)</th>
+                    <th>Blood Pack Count</th>
+                    <th>Transfer Date</th>
+                </tr>
+                {% for bloodTransferred in bloodsTransferred %}
+                    <tr>
+                        <td>{{ bloodTransferred.to_blood_bank }}</td>
+                        <td>{{ bloodTransferred.from_blood_bank }}</td>
+                        <td>{{ bloodTransferred.blood_type }}</td>
+                        <td>{{ bloodTransferred.blood_amt }}</td>
+                        <td>{{ bloodTransferred.blood_pack_cnt }}</td>
+                        <td>{{ bloodTransferred.transfer_date }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "bloods" %}
+                <tr>
+                    <th>Blood Bank</th>
+                    <th>Blood Type</th>
+                    <th>Blood Amount(ml)</th>
+                    <th>Number Available</th>
+                </tr>
+                {% for blood in bloods %}
+                    <tr>
+                        <td>{{ blood.bb_name }}</td>
+                        <td>{{ blood.b_type }}</td>
+                        <td>{{ blood.blood_amt }}</td>
+                        <td>{{ blood.num_available }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "nurses" %}
+                <tr>
+                    <th>Nurse ID</th>
+                    <th>Nurse's First Name</th>
+                    <th>Nurse's Last Name</th>
+                </tr>
+                {% for nurse in nurses %}
+                    <tr>
+                        <td>{{ nurse.n_id }}</td>
+                        <td>{{ nurse.n_fname }}</td>
+                        <td>{{ nurse.n_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "nursesTakingCareOf" %}
+                <tr>
+                    <th>Nurse's First Name</th>
+                    <th>Nurse's Last Name</th>
+                    <th>Patient's First Name</th>
+                    <th>Patient's Last Name</th>
+                </tr>
+                {% for nurseTakingCareOf in nursesTakingCareOf %}
+                    <tr>
+                        <td>{{ nurseTakingCareOf.n_fname }}</td>
+                        <td>{{ nurseTakingCareOf.n_lname }}</td>
+                        <td>{{ nurseTakingCareOf.p_fname }}</td>
+                        <td>{{ nurseTakingCareOf.p_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "supervisedNurses" %}
+                <tr>
+                    <th>Supervisor's First Name</th>
+                    <th>Supervisor's Last Name</th>
+                    <th>Supervisee's First Name</th>
+                    <th>Supervisee's Last Name</th>
+                </tr>
+                {% for supervisedNurse in supervisedNurses %}
+                    <tr>
+                        <td>{{ supervisedNurse.super_fname }}</td>
+                        <td>{{ supervisedNurse.super_lname }}</td>
+                        <td>{{ supervisedNurse.ised_fname }}</td>
+                        <td>{{ supervisedNurse.ised_lname }}</td>
+                    </tr>
+                {% endfor %}
+            
+            {% elif chosen == "accounts" %}
+                <tr>
+                    <th>Account ID</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>User Role</th>
+                </tr>
+                {% for account in accounts %}
+                    <tr>
+                        <td>{{ account.id }}</td>
+                        <td>{{ account.usrName }}</td>
+                        <td>{{ account.psswd }}</td>
+                        <td>{{ account.userRole }}</td>
+                    </tr>
+                {% endfor %}
+            
+            {% elif chosen == "notifications" %}
+                <tr>
+                   
+                    <th>Notification ID</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                {% for notification in notifications %}
+                    <tr>
+                        
+                        <td>{{ notification.not_id }}</td>
+                        <td>{{ notification.message }}</td>
+                        <td>{{ notification.m_date }}</td>
+                        <td>{{ notification.time }}</td>
+                
+                    </tr>
+                {% endfor %}
+                </tr>
+                
+            {% endif%}
+        </table>
+    {%endif%}
+{% endblock %}

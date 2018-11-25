@@ -1,0 +1,154 @@
+{% extends "layout.html" %}
+{% block body %}
+
+    {% if session.logged_in %}
+        <form action="{{ url_for('show_links') }}" method="post" class=add-entry>
+            <input type="submit" name="action" value="Show Doctors"/>
+            <input type="submit" name="action" value="Show Doctors taking care of patients..."/>
+            <input type="submit" name="action" value="Show Doctors Assisted by which Nurses"/>
+            <input type="submit" name="action" value="Show Patients"/>
+            <input type="submit" name="action" value="Show Patients Who Needs Blood"/>
+            <input type="submit" name="action" value="Show Donors" />
+            <input type="submit" name="action" value="Show Donor File" />
+            <input type="submit" name="action" value="Show Nurses" />
+            <input type="submit" name="action" value="Show Nurses Taking Care of Which Patients..." />
+        </form>
+
+        <table class=table>
+            {% if chosen == "doctors" %}
+                <tr>
+                    <th>Doctor ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+                {% for doctor in doctors %}
+                    <tr>
+                        <td>{{ doctor.d_id }}</td>
+                        <td>{{ doctor.d_fname }}</td>
+                        <td>{{ doctor.d_lname}}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "doctorsTakesCareOf" %}
+                <tr>
+                    <th>Doctor First Name</th>
+                    <th>Doctor Last Name</th>
+                    <th>Patient's First Name</th>
+                    <th>Patient's Last Name</th>
+                </tr>
+                {% for doctorTakesCareOf in doctorsTakesCareOf %}
+                    <tr>
+                        <td>{{ doctorTakesCareOf.d_fname }}</td>
+                        <td>{{ doctorTakesCareOf.d_lname }}</td>
+                        <td>{{ doctorTakesCareOf.p_fname }}</td>
+                        <td>{{ doctorTakesCareOf.p_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "doctorsAssistedBy" %}
+                <tr>
+                    <th>Doctor First Name</th>
+                    <th>Doctor Last Name</th>
+                    <th>Nurse's First Name</th>
+                    <th>Nurse's Last Name</th>
+                </tr>
+                {% for doctorAssistedBy in doctorsAssistedBy %}
+                    <tr>
+                        <td>{{ doctorAssistedBy.d_fname }}</td>
+                        <td>{{ doctorAssistedBy.d_lname }}</td>
+                        <td>{{ doctorAssistedBy.n_fname }}</td>
+                        <td>{{ doctorAssistedBy.n_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "patients" %}
+                <tr>
+                    <th>Patient ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Blood Type</th>
+                </tr>
+                {% for patient in patients %}
+                    <tr>
+                        <td>{{ patient.p_id }}</td>
+                        <td>{{ patient.p_fname }}</td>
+                        <td>{{ patient.p_lname}}</td>
+                        <td>{{ patient.blood_type }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "patientsWhoNeedBlood" %}
+                <tr>
+                    <th>Patient's First Name</th>
+                    <th>Patient's Last Name</th>
+                </tr>
+                {% for patientWhoNeedBlood in patientsWhoNeedBlood %}
+                    <tr>
+                        <td>{{ patientWhoNeedBlood.p_fname }}</td>
+                        <td>{{ patientWhoNeedBlood.p_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "donors" %}
+                <tr>
+                    <th>Donor ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+                {% for donor in donors %}
+                    <tr>
+                        <td>{{ donor.d_id }}</td>
+                        <td>{{ donor.d_fname }}</td>
+                        <td>{{ donor.d_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "donorFile" %}
+                <tr>
+                    <th>Donor ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Blood Type</th>
+                    <th>Condition</th>
+                    <th>Blood Amount(ml) Donated</th>
+                    <th>Number of Times Donated</th>
+                    <th>Date last Donated</th>
+                </tr>
+                {% for donorFile in donorFiles %}
+                    <tr>
+                        <td>{{ donorFile.df_id }}</td>
+                        <td>{{ donorFile.donor_fname }}</td>
+                        <td>{{ donorFile.donor_lname }}</td>
+                        <td>{{ donorFile.blood_type }}</td>
+                        <td>{{ donorFile.condition }}</td>
+                        <td>{{ donorFile.blood_amt_donated }}</td>
+                        <td>{{ donorFile.num_times_donate }}</td>
+                        <td>{{ donorFile.date_last_donated }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "nurses" %}
+                <tr>
+                    <th>Nurse ID</th>
+                    <th>Nurse's First Name</th>
+                    <th>Nurse's Last Name</th>
+                </tr>
+                {% for nurse in nurses %}
+                    <tr>
+                        <td>{{ nurse.n_id }}</td>
+                        <td>{{ nurse.n_fname }}</td>
+                        <td>{{ nurse.n_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% elif chosen == "nursesTakingCareOf" %}
+                <tr>
+                    <th>Nurse's First Name</th>
+                    <th>Nurse's Last Name</th>
+                    <th>Patient's First Name</th>
+                    <th>Patient's Last Name</th>
+                </tr>
+                {% for nurseTakingCareOf in nursesTakingCareOf %}
+                    <tr>
+                        <td>{{ nurseTakingCareOf.n_fname }}</td>
+                        <td>{{ nurseTakingCareOf.n_lname }}</td>
+                        <td>{{ nurseTakingCareOf.p_fname }}</td>
+                        <td>{{ nurseTakingCareOf.p_lname }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif%}
+        </table>
+    {% endif %}
+{% endblock %}
