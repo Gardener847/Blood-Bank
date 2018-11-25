@@ -22,141 +22,7 @@
             
         </form>
 
-        {% if chosen %}
-            <!-- Change Forms -->
-            <form action="{{ url_for('change_data') }}" method="post" class=add-entry>
-                {% if chosen == "bloods" %}
-                    <h2>Transfer Blood</h2>
-                    <div id="deleteForm">
-                        <ul>
-                            <li>
-                                Transfer From:
-                                <input type=text size=30 name=transferred_from>
-                            </li>
-                            <li>
-                                Transfer To:
-                                <input type=text size=30 name=transferred_to>
-                            </li>
-                            <li>
-                                Blood Type:
-                                <input type=text size=30 name=blood_type>
-                            </li>
-                            <li>
-                                Blood Pack Count:
-                                <input type=text size=30 name=blood_pack_cnt>
-                            </li>
-                            <li>
-                                <input type="submit" name="action" value="Transfer Blood" />
-                            </li>
-                        </ul>
-                    </div>
-                {% elif chosen == "patients" %}
-                    <h2>Change Patient Name</h2>
-                    <div id="deleteForm">
-                        <ul>
-                            <li>
-                                Patient ID:
-                                <input type=text size=30 name=p_id>
-                            </li>
-                            <li>
-                                New First Name:
-                                <input type=text size=30 name=p_fNewName>
-                            </li>
-                            <li>
-                                New Last Name:
-                                <input type=text size=30 name=p_lNewName>
-                            </li>
-                            <li>
-                                <input type="submit" name="action" value="Change Patient's Name" />
-                            </li>
-                        </ul>
-                    </div>
-                 <h2>Change Blood Type</h2>
-                    <div id="deleteForm">
-                        <ul>
-                            <li>
-                                Patient ID:
-                                <input type=text size=30 name=pB_id>
-                            </li>
-                            <li>
-                                New Blood Type:
-                                <input type=text size=3 name=blood_type>
-                            </li>
-                            <li>
-                                <input type="submit" name="action" value="Change Patient's Blood Type" />
-                            </li>
-                        </ul>
-                    </div>
-                {% elif chosen == "supervisedNurses" %}
-                    <h2>Change Supervisor</h2>
-                    <div id="deleteForm">
-                        <ul>
-                            <li>
-                                New Supervisor ID:
-                                <input type=text size=30 name=supervisor_id>
-                            </li>
-                            <li>
-                                New Super First Name:
-                                <input type=text size=30 name=super_fname>
-                            </li>
-                            <li>
-                               New Super Last Name:
-                                <input type=text size=30 name=super_lname>
-                            </li>
-                            <li>
-                                Current Supervised ID:
-                                <input type=text size=30 name=supervised_id>
-                            </li>
-                            
-                            
-                            <li>
-                                <input type="submit" name="action" value="Change Supervisor" />
-                            </li>
-                        </ul>
-                    </div>
-                {% elif chosen == "nursesTakingCareOf" %}    
-                 <h2>Change Patient's Nurse</h2>
-                    <div id="deleteForm">
-                        <ul>
-                            <li>
-                                Current Patient ID:
-                                <input type=text size=30 name=patient_id>
-                            </li>
-                            <li>
-                                New Nurse ID:
-                                <input type=text size=30 name=nurse_id>
-                            </li>
-                                                     
-                            <li>
-                                <input type="submit" name="action" value="Change Patient's Nurse" />
-                            </li>
-                        </ul>
-                    </div>
-                {% elif chosen == "nurses" %}
-                    <h2>Change Nurse Name</h2>
-                    <div id="deleteForm">
-                        <ul>
-                            <li>
-                               Current Nurse ID:
-                                <input type=text size=30 name=n_id>
-                            </li>
-                            <li>
-                                New Nurse First Name:
-                                <input type=text size=30 name=n_fname>
-                            </li>
-                            <li>
-                                New Nurse Last Name:
-                                <input type=text size=30 name=n_lname>
-                            </li>
-                            
-                            <li>
-                                <input type="submit" name="action" value="Change Nurse Name" />
-                            </li>
-                        </ul>
-                    </div>
-                {% endif %}
-            </form>
-
+        
             <!-- Add Forms -->
             <form action="{{ url_for('add_form') }}" method="post" class=add-entry>
                 {% if chosen == "patients" %}
@@ -181,6 +47,49 @@
                             </li>
                             <li>
                                 <input type="submit" name="addForm" value="Add Patient" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "doctors" %}
+                    <h2>Add Doctor</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Doctor ID:
+                                <input type=text size=30 name=d_id>
+                            </li>
+                            <li>
+                                Doctor First Name:
+                                <input type=text size=30 name=d_fname>
+                            </li>
+                            <li>
+                                Doctor Last Name:
+                                <input type=text size=30 name=d_lname>
+                            </li>
+                           
+                            <li>
+                                <input type="submit" name="addForm" value="Add Doctor" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "bloodBank" %}
+                    <h2>Add Blood Bank</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Blood Bank Name:
+                                <input type=text size=30 name=bb_name>
+                            </li>
+                            <li>
+                                Blood Bank ID:
+                                <input type=text size=30 name=bb_id>
+                            </li>
+                            <li>
+                                Blood Bank Location:
+                                <input type=text size=30 name=bb_location>
+                            </li>
+                            <li>
+                                <input type="submit" name="addForm" value="Add Blood Bank" />
                             </li>
                         </ul>
                     </div>
@@ -255,7 +164,62 @@
                                 <input type="submit" name="addForm" value="Get Blood from Donor" />
                             </li>
                         </ul>
-                    </div
+                    </div>
+                {% elif chosen == "doctorsAssistedBy" %}
+                    <h2>Add Doctor-Nurse Relation</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Doctor ID:
+                                <input type=text size=30 name=doctor_id>
+                            </li>
+                            <li>
+                                Nurse ID:
+                                <input type=text size=30 name=nurse_id>
+                            </li>
+                            <li>
+                                <input type="submit" name="addForm" value="Add Doctor-Nurse Relation" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "doctorsTakesCareOf" %}
+                    <h2>Add Doctor-Patient Relation</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Doctor ID:
+                                <input type=text size=30 name=doctor_id>
+                            </li>
+                            <li>
+                                Patient ID:
+                                <input type=text size=30 name=patient_id>
+                            </li>
+                            <li>
+                                <input type="submit" name="addForm" value="Add Doctor-Patient Relation" />
+                            </li>
+                        </ul>
+                    </div>  
+                {% elif chosen == "donors" %}
+                    <h2>Add Donor</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Donor ID:
+                                <input type=text size=30 name=d_id>
+                            </li>
+                            <li>
+                                Donor First Name:
+                                <input type=text size=30 name=d_fname>
+                            </li>
+                            <li>
+                                Donor Last Name:
+                                <input type=text size=30 name=d_lname>
+                            </li>
+                            <li>
+                                <input type="submit" name="addForm" value="Add Donor" />
+                            </li>
+                        </ul>
+                    </div>
                 {% elif chosen == "supervisedNurses" %}
                     <h2>Add Supervisor</h2>
                     <div id="deleteForm">
@@ -341,7 +305,63 @@
                                 <input type="submit" name="action" value="Delete Patient" />
                             </li>
                         </ul>
-                    </div
+                    </div>
+                {% elif chosen == "doctors" %}
+                    <h2>Delete Doctor</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Doctor ID:
+                                <input type=text size=30 name=d_id>
+                            </li>
+                            <li>
+                                Doctor First Name:
+                                <input type=text size=30 name=d_fname>
+                            </li>
+                            <li>
+                               Doctor Last Name:
+                                <input type=text size=30 name=d_lname>
+                            </li>
+                           
+                            <li>
+                                <input type="submit" name="action" value="Delete Doctor" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "doctorsTakesCareOf" %}
+                    <h2>Delete Doctor-Patient Relation</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Doctor ID:
+                                <input type=text size=30 name=doctor_id>
+                            </li>
+                            <li>
+                                Patient ID:
+                                <input type=text size=30 name=patient_id>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Delete Doctor-Patient Relation" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "doctorsAssistedBy" %}
+                    <h2>Delete Doctor-Nurse Relation</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Doctor ID:
+                                <input type=text size=30 name=doctor_id>
+                            </li>
+                            <li>
+                                Nurse ID:
+                                <input type=text size=30 name=nurse_id>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Delete Doctor-Nurse Relation" />
+                            </li>
+                        </ul>
+                    </div>
                 {% elif chosen == "nursesTakingCareOf" %}
                     <h2>Delete Nurse-Patient Relation</h2>
                     <div id="deleteForm">
@@ -359,7 +379,28 @@
                                 <input type="submit" name="action" value="Delete Nurse-Patient Relation" />
                             </li>
                         </ul>
-                    </div> 
+                    </div>
+                {% elif chosen == "donors" %}
+                    <h2>Delete Donor</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Donor ID:
+                                <input type=text size=30 name=d_id>
+                            </li>
+                            <li>
+                                Donor First Name:
+                                <input type=text size=30 name=d_fname>
+                            </li>
+                            <li>
+                                Donor Last Name:
+                                <input type=text size=30 name=d_lname>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Delete Donor" />
+                            </li>
+                        </ul>
+                    </div>
 				{% elif chosen == "nurses" %}
                     <h2>Delete Nurse</h2>
 					<div id="deleteForm">
@@ -417,6 +458,221 @@
                         </ul>
                     </div>
                 {% endif %}
+        {% if chosen %}
+            <!-- Change Forms -->
+            <form action="{{ url_for('change_data') }}" method="post" class=add-entry>
+                {% if chosen == "bloods" %}
+                    <h2>Transfer Blood</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Transfer From:
+                                <input type=text size=30 name=transferred_from>
+                            </li>
+                            <li>
+                                Transfer To:
+                                <input type=text size=30 name=transferred_to>
+                            </li>
+                            <li>
+                                Blood Type:
+                                <input type=text size=30 name=blood_type>
+                            </li>
+                            <li>
+                                Blood Pack Count:
+                                <input type=text size=30 name=blood_pack_cnt>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Transfer Blood" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "patients" %}
+                    <h2>Change Patient Name</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Patient ID:
+                                <input type=text size=30 name=p_id>
+                            </li>
+                            <li>
+                                New First Name:
+                                <input type=text size=30 name=p_fNewName>
+                            </li>
+                            <li>
+                                New Last Name:
+                                <input type=text size=30 name=p_lNewName>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Change Patient's Name" />
+                            </li>
+                        </ul>
+                    </div>
+                 <h2>Change Blood Type</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Patient ID:
+                                <input type=text size=30 name=pB_id>
+                            </li>
+                            <li>
+                                New Blood Type:
+                                <input type=text size=3 name=blood_type>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Change Patient's Blood Type" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "donors" %}
+                    <h2>Change Donors Name</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Current Donor ID:
+                                <input type=text size=30 name=d_id>
+                            </li>
+                            <li>
+                                New Donor First Name:
+                                <input type=text size=30 name=d_fname>
+                            </li>
+                            <li>
+                                New Donor Last Name:
+                                <input type=text size=30 name=d_lname>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Change Donors Name" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "doctors" %}
+                    <h2>Change Doctor Name</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Current Doctor ID:
+                                <input type=text size=30 name=d_id>
+                            </li>
+                            <li>
+                                New First Name:
+                                <input type=text size=30 name=d_fname>
+                            </li>
+                            <li>
+                                New Last Name:
+                                <input type=text size=30 name=d_lname>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Change Doctor Name" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "bloodBank" %}
+                    <h2>Change Blood Banks Name/Location</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                New Blood Bank Name:
+                                <input type=text size=30 name=bb_name>
+                            </li>
+                            <li>
+                                Blood Bank ID:
+                                <input type=text size=30 name=bb_id>
+                            </li>
+                            <li>
+                                New Blood Bank Location:
+                                <input type=text size=30 name=bb_location>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Change Blood Bank Name" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "doctorsTakesCareOf" %}
+                    <h2>Change Doctor-Patient Relation</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                New Doctor ID:
+                                <input type=text size=30 name=doctor_id>
+                            </li>
+                            <li>
+                                New Patient ID:
+                                <input type=text size=30 name=patient_id>
+                            </li>
+                            <li>
+                                <input type="submit" name="action" value="Change Doctor-Patient Relation" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "supervisedNurses" %}
+                    <h2>Change Supervisor</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                New Supervisor ID:
+                                <input type=text size=30 name=supervisor_id>
+                            </li>
+                            <li>
+                                New Super First Name:
+                                <input type=text size=30 name=super_fname>
+                            </li>
+                            <li>
+                               New Super Last Name:
+                                <input type=text size=30 name=super_lname>
+                            </li>
+                            <li>
+                                Current Supervised ID:
+                                <input type=text size=30 name=supervised_id>
+                            </li>
+                            
+                            
+                            <li>
+                                <input type="submit" name="action" value="Change Supervisor" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "nursesTakingCareOf" %}    
+                 <h2>Change Patient's Nurse</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                                Current Patient ID:
+                                <input type=text size=30 name=patient_id>
+                            </li>
+                            <li>
+                                New Nurse ID:
+                                <input type=text size=30 name=nurse_id>
+                            </li>
+                                                     
+                            <li>
+                                <input type="submit" name="action" value="Change Patient's Nurse" />
+                            </li>
+                        </ul>
+                    </div>
+                {% elif chosen == "nurses" %}
+                    <h2>Change Nurse Name</h2>
+                    <div id="deleteForm">
+                        <ul>
+                            <li>
+                               Current Nurse ID:
+                                <input type=text size=30 name=n_id>
+                            </li>
+                            <li>
+                                New Nurse First Name:
+                                <input type=text size=30 name=n_fname>
+                            </li>
+                            <li>
+                                New Nurse Last Name:
+                                <input type=text size=30 name=n_lname>
+                            </li>
+                            
+                            <li>
+                                <input type="submit" name="action" value="Change Nurse Name" />
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </form>
+
         <table class=table>
             {% if chosen == "doctors" %}
                 <tr>

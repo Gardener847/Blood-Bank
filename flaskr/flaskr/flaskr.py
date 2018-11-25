@@ -460,7 +460,7 @@ def delete_data():
         db.commit()
     elif (request.form.get('action', None) == "Delete Blood Bank"):
         flash('Data deleted. DB committed successfully.' + request.form['bb_id'])
-        db.execute('delete from blood_bank where bb_name=? AND bb_id=? AND bb_location=?', [request.form['bb_name'], request.form['bb_id'], request.form['bb_location']])
+        db.execute('delete from blood_bank where  bb_id=?', [request.form['bb_id']])
         db.commit()
     elif (request.form.get('action', None) == "Delete Doctor-Patient Relation"):
         flash('Data deleted. DB committed successfully.' + request.form['doctor_id'])
@@ -534,6 +534,7 @@ def change_data():
         db.execute('update doctor_take_care_of set patient_id=? where doctor_id=?',
             [request.form['doctor_id'], request.form['patient_id']])
         flash('Changed Doctor-Patient\'s Relation')
+        db.commit()
     elif (request.form.get('action', None) == "Change Nurse Name"):
         db.execute('update nurse set n_lname=?,n_fname=? where n_id=?', [request.form['n_lname'], request.form['n_fname'], request.form['n_id']])
         flash('Nurse name Changed')
