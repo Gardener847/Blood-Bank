@@ -353,12 +353,21 @@ def add_form():
         # update donor file
     elif (request.form.get('addForm', None) == "Add Blood Bank"):
         f = open("sampleAppLogs.txt", "a+")
-        f.write("INSERT INTO blood_bank VALUES (%s, %s, %s)\n" % request.form['bb_id'], request.form['bb_name'], request.form['bb_location'])
+        f.write("INSERT INTO blood_bank VALUES (%s, %s, %s)\n" %(request.form['bb_id'], request.form['bb_name'], request.form['bb_location']))
         f.close()
         db.execute('insert into blood_bank (bb_id, bb_name, bb_location) values (?, ?, ?)', 
         [request.form['bb_id'], request.form['bb_name'], request.form['bb_location']])
+        db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "A-"]) 
+        db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "A+"])
+        db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "B-"])
+        db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "B+"])
+        db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "O+"])
+        db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "O-"])
+        db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "AB-"])
+        db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "AB+"])
         flash('Added Blood Bank')
         db.commit()
+        
     elif(request.form.get('addForm',None) == "Add Supervisor"):
         f = open("sampleAppLogs.txt", "a+")
         f.write("INSERT INTO supervise VALUES (%s, %s, %s, %s, %s,%s)\n" % request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id'], request.form['ised_fname'], request.form['ised_lname'])
@@ -494,6 +503,7 @@ def delete_data():
     elif (request.form.get('action', None) == "Delete Blood Bank"):
         flash('Data deleted. DB committed successfully.' + request.form['bb_id'])
         db.execute('delete from blood_bank where  bb_id=?', [request.form['bb_id']])
+        db.execute('delete from bloods where blood_bank_ref_id=?' , [request.form['bb_id']]) 
         db.commit()
     elif (request.form.get('action', None) == "Delete Doctor-Patient Relation"):
         flash('Data deleted. DB committed successfully.' + request.form['doctor_id'])
@@ -592,9 +602,10 @@ def change_data():
             [request.form['blood_type'], request.form['pB_id']])
         flash('Changed Patient\'s Blood Type')
         db.commit()
+    #elif(request.form.get('action', None) == "Update Blood Bank Information"):
+    #    db.execute('update bloods set blood_type=? where 
     elif(request.form.get('action', None) == "Change Patient's Nurse"):
         db.execute('update nurse_take_care_of set nurse_id=? where patient_id=?', [request.form['nurse_id'],request.form['patient_id']])
-        
         flash('Nurse Changed')
         db.commit()
     # Transfer Blood Form
