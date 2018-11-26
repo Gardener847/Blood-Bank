@@ -292,21 +292,34 @@ def add_form():
     ti= time.ctime()
     # Patient Forms
     if (request.form.get('addForm', None) == "Add Patient"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO patients VALUES (%s, %s, %s, %s)\n" % request.form['p_id'], request.form['p_fname'], request.form['p_lname'], request.form['blood_type'])
+        f.close()
         db.execute('insert into patients (p_id, p_fname, p_lname, blood_type) values (?, ?, ?, ?)', 
         [request.form['p_id'], request.form['p_fname'], request.form['p_lname'], request.form['blood_type']]) 
         flash('Added Patient')
         db.commit()
+      
     elif (request.form.get('addForm', None) == "Add Doctor"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO doctor VALUES (%s, %s, %s)\n" % request.form['d_id'], request.form['d_fname'], request.form['d_lname'])
+        f.close()
         db.execute('insert into doctor (d_id, d_fname, d_lname) values (?, ?, ?)', 
         [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
         flash('Added Doctor')
         db.commit()
     elif (request.form.get('addForm', None) == "Add Donor"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO donor VALUES (%s, %s, %s)\n" % request.form['d_id'], request.form['d_fname'], request.form['d_lname'])
+        f.close()
         db.execute('insert into donor (d_id, d_fname, d_lname) values (?, ?, ?)', 
         [request.form['d_id'], request.form['d_fname'], request.form['d_lname']])
         flash('Added Donor')
         db.commit()
     elif (request.form.get('addForm', None) == "Add Nurse-Patient Relation"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO nurse_take_care_of VALUES (%s, %s)\n" % request.form['nurse_id'], request.form['patient_id'])
+        f.close()
         db.execute('insert into nurse_take_care_of (nurse_id, patient_id) values (?, ?)',
         [request.form['nurse_id'], request.form['patient_id']])
         flash('Added Nurse-Patient Relation')
@@ -339,22 +352,34 @@ def add_form():
             flash(d_fname + ' cannot donate')
         # update donor file
     elif (request.form.get('addForm', None) == "Add Blood Bank"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO blood_bank VALUES (%s, %s, %s)\n" % request.form['bb_id'], request.form['bb_name'], request.form['bb_location'])
+        f.close()
         db.execute('insert into blood_bank (bb_id, bb_name, bb_location) values (?, ?, ?)', 
         [request.form['bb_id'], request.form['bb_name'], request.form['bb_location']])
         flash('Added Blood Bank')
         db.commit()
     elif(request.form.get('addForm',None) == "Add Supervisor"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO supervise VALUES (%s, %s, %s, %s, %s,%s)\n" % request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id', request.form['ised_fname'], request.form['ised_lname'])
+        f.close()
         db.execute('insert into supervise (supervisor_id, super_fname, super_lname, supervised_id, ised_fname, ised_lname) values (?, ?, ?, ?, ?, ?)',
         [request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id'], request.form['ised_fname'],request.form['ised_lname']])
         flash('Relation added')
         db.commit()
  
     elif (request.form.get('addForm', None) == "Add Doctor-Patient Relation"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO doctor_take_care_of VALUES (%s, %s)\n" % request.form['doctor_id'], request.form['patient_id'])
+        f.close()
         db.execute('insert into doctor_take_care_of (doctor_id, patient_id) values (?, ?)',
         [request.form['doctor_id'], request.form['patient_id']])
         flash('Added Doctor-Patient Relation')
         db.commit()
     elif (request.form.get('addForm', None) == "Add Doctor-Nurse Relation"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO assists VALUES (%s, %s)\n" % request.form['doctor_id'], request.form['nurse_id'])
+        f.close()
         db.execute('insert into assists (doctor_id, nurse_id) values (?, ?)',
         [request.form['doctor_id'], request.form['nurse_id']])
         flash('Added Doctor-Nurse Relation')
@@ -416,13 +441,18 @@ def add_form():
             db.commit()
  
     elif (request.form.get('addForm', None) == "Add Account"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO doctor_take_care_of VALUES (%s, %s, %s,%s)\n" % request.form['id'], request.form['usrName'], request.form['psswd'], request.form['userRole'])
+        f.close()
         db.execute('insert into accounts (id, usrName, psswd, userRole) values (?, ?, ?, ?)', 
         [request.form['id'], request.form['usrName'], request.form['psswd'], request.form['userRole']])
         addac= "Added Account"
         flash('%s'%addac)
         db.commit()
     elif (request.form.get('addForm', None) == "Add Notifications"):
-
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO doctor_take_care_of VALUES (%s, %s, %s,%s,%s)\n" % request.form['not_id'], request.form['message'], request.form['u_role'], request.form['m_date'], request.form['m_time'])
+        f.close()
         db.execute('insert into notifications(not_id, message,u_role,m_date,m_time) values (?, ?,?,?,?)', 
         [request.form['not_id'], request.form['message'], request.form['u_role'], today,ti])
         flash('Message added')
@@ -431,6 +461,9 @@ def add_form():
     
    
     elif(request.form.get('addForm', None) == "Add Nurse"):
+        f = open("sampleAppLogs.txt", "a+")
+        f.write("INSERT INTO nurse VALUES (%s, %s, %s)\n" % request.form['n_id'], request.form['n_fname'], request.form['n_lname'])
+        f.close()
         db.execute('insert into nurse (n_id, n_fname, n_lname) values ( ?, ?, ?)', [request.form['n_id'], request.form['n_fname'], request.form['n_lname']])
         flash('Nurse Added')
 	db.commit()
