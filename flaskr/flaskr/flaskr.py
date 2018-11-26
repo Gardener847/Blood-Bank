@@ -361,7 +361,7 @@ def add_form():
         db.commit()
     elif(request.form.get('addForm',None) == "Add Supervisor"):
         f = open("sampleAppLogs.txt", "a+")
-        f.write("INSERT INTO supervise VALUES (%s, %s, %s, %s, %s,%s)\n" % request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id', request.form['ised_fname'], request.form['ised_lname'])
+        f.write("INSERT INTO supervise VALUES (%s, %s, %s, %s, %s,%s)\n" % request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id'], request.form['ised_fname'], request.form['ised_lname'])
         f.close()
         db.execute('insert into supervise (supervisor_id, super_fname, super_lname, supervised_id, ised_fname, ised_lname) values (?, ?, ?, ?, ?, ?)',
         [request.form['supervisor_id'], request.form['super_fname'], request.form['super_lname'], request.form['supervised_id'], request.form['ised_fname'],request.form['ised_lname']])
