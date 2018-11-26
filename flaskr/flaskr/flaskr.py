@@ -560,7 +560,8 @@ def change_data():
         flash('Changed Patient\'s Blood Type')
         db.commit()
     elif(request.form.get('action', None) == "Change Patient's Nurse"):
-        db.execute('update nurse_take_care_of set nurse_id=? where patient_id=?', [request['nurse_id'],request['patient_id']])
+        db.execute('update nurse_take_care_of set nurse_id=? where patient_id=?', [request.form['nurse_id'],request.form['patient_id']])
+        
         flash('Nurse Changed')
         db.commit()
     # Transfer Blood Form
