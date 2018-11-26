@@ -608,7 +608,7 @@ def change_data():
         db.execute('update nurse_take_care_of set nurse_id=? where patient_id=?', [request.form['nurse_id'],request.form['patient_id']])
         flash('Nurse Changed')
         db.commit()
-    # Transfer Blood Form
+    # #Transfer Blood Form
     elif (request.form.get('action', None) == "Transfer Blood"):
         cur = db.execute('select * from bloods')
         bloods = cur.fetchall()
