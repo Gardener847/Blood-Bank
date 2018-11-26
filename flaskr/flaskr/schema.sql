@@ -283,6 +283,22 @@ create table accounts (
         PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS notifications;
+create table notifications (
+    not_id      varchar(9),
+    message     varchar(500),
+    u_role      varchar(9),
+    m_date      date,
+    m_time      time,
+
+    CONSTRAINT PK_not_id
+        PRIMARY KEY(not_id),
+
+    CONSTRAINT FK_u_role
+        FOREIGN KEY(u_role) REFERENCES accounts (userRole)
+);
+
+
 INSERT INTO accounts VALUES
 ('1', 'admin@example.com', 'Password1', 'admin'),
 ('2', 'doctor@example.com', 'Password2', 'doctor'),

@@ -261,12 +261,12 @@ def show_links():
             global role 
             if(role == "admin"):
                 #uname = 
-                cur = db.execute('select n.not_id, n.message, n.m_date, n.time from notifications n, accounts a where a.userRole= "admin" order by time desc')
+                cur = db.execute('select n.not_id, n.message, n.m_date, n.m_time from notifications n, accounts a where a.userRole= "admin" order by m_time desc')
                 notifications = cur.fetchall()
                 flash('inside show notifications')
                 return render_template('show_entries_admin.html', notifications=notifications, chosen="notifications")
             elif(role == "head nurse"):
-                cur = db.execute('select n.not_id, n.message, n.m_date, n.time from notifications n, accounts a where a.userRole= "head nurse" AND n.u_role= "head nurse" order by time desc')
+                cur = db.execute('select n.not_id, n.message, n.m_date, n.m_time from notifications n, accounts a where a.userRole= "head nurse" AND n.u_role= "head nurse" order by m_time desc')
                 notifications = cur.fetchall()
                 flash('inside show notifications')
                 return render_template('show_entries_nurse.html', notifications=notifications, chosen = "notifications")
@@ -423,7 +423,7 @@ def add_form():
         db.commit()
     elif (request.form.get('addForm', None) == "Add Notifications"):
 
-        db.execute('insert into notifications(not_id, message,u_role,m_date,time) values (?, ?,?,?,?)', 
+        db.execute('insert into notifications(not_id, message,u_role,m_date,m_time) values (?, ?,?,?,?)', 
         [request.form['not_id'], request.form['message'], request.form['u_role'], today,ti])
         flash('Message added')
         db.commit()
@@ -685,7 +685,7 @@ def login():
             for i in db.execute('SELECT  B.blood_amt\
                     FROM    bloods AS B, blood_bank AS BB, has_blood AS HB\
                     WHERE   BB.bb_id = HB.blood_bank_id AND HB.blood_bank_ref_id = B.blood_bank_ref_id AND B.blood_amt <= "20000"'):
-                db.execute('insert into notifications (not_id, message,u_role,m_date,time) values  (?,?,?,?,?)', [random , "Check blood bank inventory. A blood bank has less than 20,000ml of a certain type of blood.", "head nurse", today,ti])
+                db.execute('insert into notifications (not_id, message,u_role,m_date,m_time) values  (?,?,?,?,?)', [random , "Check blood bank inventory. A blood bank has less than 20,000ml of a certain type of blood.", "head nurse", today,ti])
                 db.commit()
                 flash('New Notifications')
                 break    
