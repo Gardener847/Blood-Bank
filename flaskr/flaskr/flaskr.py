@@ -289,7 +289,8 @@ def add_form():
     db = get_db()
     
     today = date.today().strftime('%Y-%m-%d')  
-    ti= time.ctime()
+    ti= time.strftime("%H:%M:%S")
+    
     # Patient Forms
     if (request.form.get('addForm', None) == "Add Patient"):
         f = open("sampleAppLogs.txt", "a+")
@@ -365,6 +366,7 @@ def add_form():
         db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "O-"])
         db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "AB-"])
         db.execute('insert into bloods (blood_bank_ref_id, b_type) values (?, ?)', [request.form['bb_id'], "AB+"])
+        db.execute('insert into has_blood (blood_bank_id, blood_bank_ref_id) values (?,?)', [request.form['bb_id'], request.form['bb_id']])
         flash('Added Blood Bank')
         db.commit()
         
@@ -433,7 +435,8 @@ def add_form():
                     patient_id = i[0]
             # insert blood given to patient into receives_blood table
             db.execute(
-                'INSERT INTO receives_blood (patient_id, blood_bank_id, received_date, blood_type, received_amt, pack_cnt) values (?, ?, ?, ?, ?, ?)', [patient_id, blood_bank_id_bb, today, blood_type, received_amt, blood_pack_cnt])
+                'INSERT INTO receives_blood (patient_id, blood_bank_id, received_date, blood_type, received_amt, pack_cnt) values (?, ?, ?, ?, ?, ?)', 
+                [patient_id, blood_bank_id_bb, today, blood_type, received_amt, blood_pack_cnt])
             # get difference values after patient receives blood
             for i in bloods:
                 if (i[0] == blood_bank_id_br and i[1] == blood_type):
@@ -504,6 +507,7 @@ def delete_data():
         flash('Data deleted. DB committed successfully.' + request.form['bb_id'])
         db.execute('delete from blood_bank where  bb_id=?', [request.form['bb_id']])
         db.execute('delete from bloods where blood_bank_ref_id=?' , [request.form['bb_id']]) 
+        db.execute('delete from has_blood where blood_bank_ref_id=?', [request.form['bb_id']])
         db.commit()
     elif (request.form.get('action', None) == "Delete Doctor-Patient Relation"):
         flash('Data deleted. DB committed successfully.' + request.form['doctor_id'])
@@ -608,7 +612,7 @@ def change_data():
         db.execute('update nurse_take_care_of set nurse_id=? where patient_id=?', [request.form['nurse_id'],request.form['patient_id']])
         flash('Nurse Changed')
         db.commit()
-    # #Transfer Blood Form
+    # Transfer Blood Form
     elif (request.form.get('action', None) == "Transfer Blood"):
         cur = db.execute('select * from bloods')
         bloods = cur.fetchall()
@@ -723,7 +727,7 @@ def login():
             session['logged_in'] = True
             flash('You were logged in as a(n) ' + role)
             today = date.today().strftime('%Y-%m-%d')  
-            ti= time.ctime()
+            ti= time.strftime("%H:%M:%S")
             random = randint(1000,9756200)
             
             #flash(cur.fetchall())

@@ -9,3 +9,5 @@ INSERT INTO blood_bank VALUES (Stanford Blood, bb98765432, South Dr #20, Mountai
 INSERT INTO blood_bank VALUES (Stanford Blood, bb98765432, South Dr #20, Mountain View, CA 94040)
 INSERT INTO blood_bank VALUES (Stanford Blood, bb98765432, South Dr #20, Mountain View, CA 94040)
 INSERT INTO blood_bank VALUES (bb98765432, Stanford Blood, South Dr #20, Mountain View, CA 94040)
+INSERT INTO blood_bank VALUES (Stanford Blood, Stanford Blood, South Dr #20, Mountain View, CA 94040)
+INSERT INTO blood_bank VALUES (bb98765432, Stanford Blood, South Dr #20, Mountain View, CA 94040)
